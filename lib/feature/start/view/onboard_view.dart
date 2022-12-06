@@ -21,16 +21,14 @@ class _OnboardViewState extends State<OnboardView> {
           Expanded(
             child: Padding(
               padding: context.paddingAll(),
-              child: PageView.builder(
-                  itemBuilder: (context, index) {
-                    return ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Card(
-                            elevation: 1,
-                            child: OnBoardSvgPicture(
-                                file: onBoardData[index].image)));
-                  },
-                  itemCount: onBoardData.length),
+              child: Card(
+                elevation: 1,
+                child: PageView.builder(
+                    itemBuilder: (context, index) {
+                      return OnBoardSvgPicture(file: onBoardData[index].image);
+                    },
+                    itemCount: onBoardData.length),
+              ),
             ),
           ),
           Expanded(
