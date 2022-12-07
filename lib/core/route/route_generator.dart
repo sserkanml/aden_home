@@ -11,12 +11,9 @@ part 'route_generator.gr.dart';
   replaceInRouteName: 'View,Route',
   routes: <AutoRoute>[
     AutoRoute(page: OnboardView, initial: true, path: PathConstant.onboardPath),
-    AutoRoute(
-      
-      page: LoginView,
-      path: PathConstant.loginPath,
-    ),
+    AutoRoute(page: LoginView,path: PathConstant.loginPath,),
     AutoRoute(page: SignupView, path: PathConstant.signupPath),
+    
   ],
 )
 class RouteGenerator extends _$RouteGenerator {}
