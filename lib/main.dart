@@ -1,19 +1,41 @@
-import 'package:aden/feature/start/view/onboard_view.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:aden/core/route/route_managment.dart';
+import 'package:aden/core/theme/dark_theme.dart';
+import 'package:aden/core/theme/light_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:kartal/kartal.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final savedThemeMode = await AdaptiveTheme.getThemeMode();
+
+  runApp(MyApp(savedMode: savedThemeMode));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  const MyApp({
+    Key? key,
+    this.savedMode,
+  }) : super(key: key);
+  final AdaptiveThemeMode? savedMode;
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Envanterus',
-      debugShowCheckedModeBanner: false,
-      home: OnboardView(),
-    );
+    return AdaptiveTheme(
+        light: LightTheme.instance!.theme.copyWith(
+            textTheme: GoogleFonts.poppinsTextTheme(context.textTheme)),
+        dark: DarkTheme.instance!.theme.copyWith(
+            textTheme: GoogleFonts.poppinsTextTheme(context.textTheme)),
+        initial: savedMode ?? AdaptiveThemeMode.light,
+        builder: (light, dark) {
+          return MaterialApp.router(
+            title: 'Envanterus',
+            theme: light,
+            darkTheme: dark,
+            debugShowCheckedModeBanner: false,
+            routerDelegate: RouteManagment.router.delegate(),
+            routeInformationParser: RouteManagment.router.defaultRouteParser(),
+          );
+        });
   }
 }

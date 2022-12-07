@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
 
-class OnboardTitle extends StatelessWidget {
-  const OnboardTitle({Key? key, required this.label}) : super(key: key);
-  final String label;
+class Headline6 extends StatelessWidget {
+  const Headline6({Key? key, required this.data}) : super(key: key);
+  final String data;
+
   @override
   Widget build(BuildContext context) {
     return Text(
-      label,
-      textAlign: TextAlign.center,
+      data,
       style: context.textTheme.headline6,
     );
   }

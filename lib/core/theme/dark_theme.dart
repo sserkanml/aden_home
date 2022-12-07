@@ -11,7 +11,10 @@ class DarkTheme {
 
   ThemeData theme = ThemeData(
       brightness: Brightness.dark,
-      primaryColor: const Color(0xFF212121),
+      canvasColor: const Color(0xFF212121),
+      appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF212121),
+          iconTheme: IconThemeData(color: Color(0xFFFFFFFF))),
       scaffoldBackgroundColor: const Color(0xFF303030),
       colorScheme: const ColorScheme(
         brightness: Brightness.dark,

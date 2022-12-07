@@ -11,7 +11,11 @@ class LightTheme {
 
   ThemeData theme = ThemeData(
       scaffoldBackgroundColor: const Color(0xFFFAFAFA),
-      primaryColor: const Color(0xFF2196F3),
+      canvasColor: Color(0xFFFAFAFA),
+      appBarTheme: const AppBarTheme(backgroundColor: Color(0xFFFAFAFA),
+      iconTheme: IconThemeData(
+        color: Color(0xFF000000)
+      )),
       brightness: Brightness.light,
       colorScheme: const ColorScheme(
         brightness: Brightness.light,
