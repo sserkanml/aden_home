@@ -45,6 +45,10 @@ dependencies:
   auto_route: ^5.0.4
   flutter_svg: ^1.1.6
   google_fonts: ^3.0.1
+  switcher: ^1.0.0
+  get_it: ^7.2.0
+  page_transition: ^2.0.9
+  flutter_next: ^0.1.1
   
 
 dev_dependencies:

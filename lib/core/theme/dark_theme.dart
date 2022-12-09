@@ -12,6 +12,9 @@ class DarkTheme {
   ThemeData theme = ThemeData(
       brightness: Brightness.dark,
       canvasColor: const Color(0xFF212121),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: Color(0xffdc5d5a),
+      ),
       appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF212121),
           iconTheme: IconThemeData(color: Color(0xFFFFFFFF))),
@@ -21,7 +24,7 @@ class DarkTheme {
         onPrimary: Color(0xFF000000),
         onSecondary: Color(0xFF000000),
         onError: Color(0xFF000000),
-        background: Color(0xFF2D2322),
+        background: Color(0xFF212121),
         onBackground: Color(0xFFFFFFFF),
         surface: Color(0xFF2D2322),
         onSurface: Color(0xFFFFFFFF),

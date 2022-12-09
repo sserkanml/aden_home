@@ -12,7 +12,7 @@ class BodyMedium extends StatelessWidget {
     return Text(
       data,
       style: context.textTheme.bodyMedium!.copyWith(
-        color: color,
+        color: color ?? context.colorScheme.onSurface,
         fontWeight: fontWeight
       ),
     );

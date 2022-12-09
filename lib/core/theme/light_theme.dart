@@ -10,12 +10,15 @@ class LightTheme {
   }
 
   ThemeData theme = ThemeData(
-      scaffoldBackgroundColor: const Color(0xFFFAFAFA),
-      canvasColor: Color(0xFFFAFAFA),
-      appBarTheme: const AppBarTheme(backgroundColor: Color(0xFFFAFAFA),
-      iconTheme: IconThemeData(
-        color: Color(0xFF000000)
-      )),
+      scaffoldBackgroundColor: const Color(0xffF6F8F9),
+      canvasColor: const Color(0xFFFAFAFA),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Color(0xffdc5d5a),
+        iconSize: 30
+      ),
+      appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFFAFAFA),
+          iconTheme: IconThemeData(color: Color(0xFF000000))),
       brightness: Brightness.light,
       colorScheme: const ColorScheme(
         brightness: Brightness.light,
@@ -28,7 +31,7 @@ class LightTheme {
         onPrimary: Color(0xFFFFFFFF),
         onSecondary: Color(0xFFFFFFFF),
         onError: Color(0xFFFFFFFF),
-        background: Color(0xFFFDF7FB),
+        background: Color(0xFFFAFAFA),
         onBackground: Color(0xFF000000),
         onSurface: Color(0xFF000000),
         surface: Color(0xFFFDF7FB),

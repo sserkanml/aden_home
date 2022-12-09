@@ -26,7 +26,7 @@ class _SignupViewState extends State<SignupView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(label: "Kayıt Ol", context: context),
+      appBar: CustomAppBar(label: "Kayıt Ol", context: context,autoImplicity: true,),
       body: Stack(
         children: [
           Positioned.fill(

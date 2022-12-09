@@ -24,7 +24,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(label: "Giriş Yap", context: context),
+      appBar: CustomAppBar(label: "Giriş Yap", context: context,autoImplicity: true,),
       body: Stack(
         children: [
           Positioned.fill(
@@ -76,7 +76,9 @@ class _LoginViewState extends State<LoginView> {
                         width: context.dynamicWidth(1),
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.router.pushNamed("/root");
+                          },
                           child: const Text(
                             "Giriş Yap",
                             style: TextStyle(color: Colors.white, fontSize: 18),
@@ -102,9 +104,10 @@ class _LoginViewState extends State<LoginView> {
                           .copyWith(color: context.colorScheme.onSurface)),
                   TextSpan(
                       text: "Kayıt Ol",
-                      recognizer: TapGestureRecognizer()..onTap = () {
-                         context.router.pushNamed(PathConstant.signupPath);
-                      },
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          context.router.pushNamed(PathConstant.signupPath);
+                        },
                       style: context.textTheme.bodyMedium!
                           .copyWith(color: context.colorScheme.primary)),
                 ])),
