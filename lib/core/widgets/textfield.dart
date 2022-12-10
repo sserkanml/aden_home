@@ -19,6 +19,9 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: context.textTheme.bodyMedium!.copyWith(
+        color: context.colorScheme.onSurface
+      ),
       keyboardType: textInputType,
       obscureText: obscureText ?? false,
       decoration: InputDecoration(

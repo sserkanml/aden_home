@@ -47,7 +47,7 @@ class ReportsView extends StatelessWidget {
                     onTap: () {
                       context.router.push(reportsModelData[index].route);
                     },
-                    subtitle: BodySmall(data: reportsModelData[index].subtitle),
+                    subtitle: BodySmall(data: reportsModelData[index].subtitle,color: context.colorScheme.onSurface.withOpacity(.5),),
                     title: BodyMedium(
                       data: reportsModelData[index].name,
                       fontWeight: FontWeight.bold,

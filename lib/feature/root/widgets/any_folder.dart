@@ -1,5 +1,6 @@
 import 'package:aden/core/util/extension.dart';
 import 'package:aden/core/widgets/bodymedium.dart';
+import 'package:aden/core/widgets/bodysmal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kartal/kartal.dart';
@@ -21,7 +22,7 @@ class AnyFolder extends StatelessWidget {
           color: context.colorScheme.onSurface,
         ),
         const SizedBox(width: 5),
-        BodyMedium(data: data),
+        BodySmall(data: data),
         const SizedBox(width: 5),
         const Icon(Icons.arrow_drop_down)
       ],

@@ -5,6 +5,7 @@ import 'package:aden/core/widgets/bodysmal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_next/views/next_accordion.dart';
 
+
 import '../../../core/widgets/textfield.dart';
 
 class CompanyDetailView extends StatelessWidget {

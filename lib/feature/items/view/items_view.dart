@@ -1,10 +1,12 @@
+import 'package:aden/core/route/route_generator.dart';
 import 'package:aden/core/util/extension.dart';
+import 'package:aden/core/view_model/show_bottom_sheet.dart';
 import 'package:aden/core/widgets/appbar.dart';
 import 'package:aden/core/widgets/bodylarge.dart';
 import 'package:aden/core/widgets/bodymedium.dart';
 import 'package:aden/feature/items/widgets/items_summary_info.dart';
 import 'package:aden/feature/root/widgets/dashboard_svg_icon.dart';
-import 'package:aden/feature/root/widgets/inventory_widget_content.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kartal/kartal.dart';
@@ -15,6 +17,7 @@ class ItemsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: itemsappbar(context),
       floatingActionButton: itemsfloatingactionbutton(context),
       body: SafeArea(
@@ -22,7 +25,7 @@ class ItemsView extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 color: context.colorScheme.background,
                 child: const ItemsSummaryInfo())
           ],
@@ -72,12 +75,19 @@ class ItemsView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const BodyLarge(data: "Ekleme yap"),
-                          const SizedBox(height: 30),
+                          const Spacer(),
                           SizedBox(
                             width: context.dynamicWidth(1),
                             height: 50,
                             child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await context.router
+                                      .push(const CreateItemsRoute());
+                                  Future.delayed(
+                                      const Duration(milliseconds: 300), () {
+                                    Navigator.pop(context);
+                                  });
+                                },
                                 child: Row(
                                   children: [
                                     SvgPicture.asset(
@@ -89,20 +99,28 @@ class ItemsView extends StatelessWidget {
                                       height: 40,
                                       color: Colors.white,
                                     ),
-                                    const SizedBox(width: 40),
+                                    const Spacer(),
                                     const BodyMedium(
                                       data: "Malzeme Ekle",
                                       color: Colors.white,
-                                    )
+                                    ),
+                                    const Spacer(),
                                   ],
                                 )),
                           ),
-                          const SizedBox(height: 20),
+                          const Spacer(),
                           SizedBox(
                             width: context.dynamicWidth(1),
                             height: 50,
                             child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await context.router
+                                      .push(const CreateFolderRoute());
+                                  Future.delayed(
+                                      const Duration(milliseconds: 300), () {
+                                    Navigator.pop(context);
+                                  });
+                                },
                                 child: Row(
                                   children: [
                                     SvgPicture.asset(
@@ -114,11 +132,12 @@ class ItemsView extends StatelessWidget {
                                       height: 40,
                                       color: Colors.white,
                                     ),
-                                    const SizedBox(width: 40),
+                                    const Spacer(),
                                     const BodyMedium(
                                       data: "Klasör Ekle",
                                       color: Colors.white,
-                                    )
+                                    ),
+                                    const Spacer(),
                                   ],
                                 )),
                           ),
@@ -152,7 +171,9 @@ class ItemsView extends StatelessWidget {
             icon: const DashboardSvgIcon(file: "qr_code.svg"),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              ShowBottomSheet.ellipsisBottomSheet(context: context);
+            },
             icon: const DashboardSvgIcon(file: "ellipsis.svg"),
           ),
         ],

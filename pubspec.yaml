@@ -49,6 +49,10 @@ dependencies:
   get_it: ^7.2.0
   page_transition: ^2.0.9
   flutter_next: ^0.1.1
+  nine_grid_view: ^2.0.0
+  swipe_refresh: ^1.0.2
+  textfield_tags: ^2.0.2
+  
   
 
 dev_dependencies:

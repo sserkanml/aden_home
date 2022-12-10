@@ -4,6 +4,10 @@ import 'package:aden/feature/authentication/view/login_view.dart';
 import 'package:aden/feature/authentication/view/signup_view.dart';
 import 'package:aden/feature/items/view/items_view.dart';
 import 'package:aden/feature/notification/view/notification_view.dart';
+import 'package:aden/feature/project/view/add_note_view.dart';
+import 'package:aden/feature/project/view/add_tag_view.dart';
+import 'package:aden/feature/project/view/create_folder_view.dart';
+import 'package:aden/feature/project/view/create_items_view.dart';
 import 'package:aden/feature/root/view/dashboard_wrapper_view.dart';
 import 'package:aden/feature/root/view/inventory_summary_view.dart';
 import 'package:aden/feature/root/view/low_stock_view.dart';
@@ -14,6 +18,7 @@ import 'package:aden/feature/search/view/search_view.dart';
 import 'package:aden/feature/settings/view/activity_history_view.dart';
 import 'package:aden/feature/settings/view/bulk_import_view.dart';
 import 'package:aden/feature/settings/view/company_detail_view.dart';
+import 'package:aden/feature/settings/view/custom_field_view.dart';
 import 'package:aden/feature/settings/view/help_support_view.dart';
 import 'package:aden/feature/settings/view/manage_tag_view.dart';
 import 'package:aden/feature/settings/view/preferences_view.dart';
@@ -52,6 +57,20 @@ part 'route_generator.gr.dart';
     ),
     CustomRoute(
       transitionsBuilder: bottomtotop,
+      page: AddNoteView,
+      path: "/add-note",
+      reverseDurationInMilliseconds: 0,
+      durationInMilliseconds: 500,
+    ),
+    CustomRoute(
+      transitionsBuilder: bottomtotop,
+      page: AddTagView,
+      path: "/add-tag",
+      reverseDurationInMilliseconds: 0,
+      durationInMilliseconds: 500,
+    ),
+    CustomRoute(
+      transitionsBuilder: bottomtotop,
       page: SetPasswordView,
       path: "/setPassword",
       reverseDurationInMilliseconds: 500,
@@ -64,6 +83,13 @@ part 'route_generator.gr.dart';
       reverseDurationInMilliseconds: 0,
       durationInMilliseconds: 500,
     ),
+     CustomRoute(
+      page: CustomFieldView,
+      transitionsBuilder: righttoleftDashboard,
+      path: "/custom-field",
+      reverseDurationInMilliseconds: 0,
+      durationInMilliseconds: 500,
+    ),
     CustomRoute(
       page: UserProfileView,
       transitionsBuilder: righttoleftDashboard,
@@ -71,6 +97,22 @@ part 'route_generator.gr.dart';
       reverseDurationInMilliseconds: 0,
       durationInMilliseconds: 500,
     ),
+      CustomRoute(
+          page: CreateFolderView,
+          transitionsBuilder: righttoleftDashboard,
+          path: "create-folder",
+          fullscreenDialog: true,
+          reverseDurationInMilliseconds: 0,
+          durationInMilliseconds: 500,
+        ),
+         CustomRoute(
+          page: CreateItemsView,
+          transitionsBuilder: righttoleftDashboard,
+          path: "create-file",
+          fullscreenDialog: true,
+          reverseDurationInMilliseconds: 0,
+          durationInMilliseconds: 500,
+        ),
     CustomRoute(
       page: CompanyDetailView,
       transitionsBuilder: righttoleftDashboard,
@@ -153,6 +195,7 @@ part 'route_generator.gr.dart';
           reverseDurationInMilliseconds: 0,
           durationInMilliseconds: 500,
         ),
+       
         CustomRoute(
           page: SyncInventroyView,
           transitionsBuilder: righttoleftDashboard,

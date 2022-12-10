@@ -41,6 +41,28 @@ class _$RouteGenerator extends RootStackRouter {
         barrierDismissible: false,
       );
     },
+    AddNoteRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+        routeData: routeData,
+        child: const AddNoteView(),
+        transitionsBuilder: bottomtotop,
+        durationInMilliseconds: 500,
+        reverseDurationInMilliseconds: 0,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    AddTagRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+        routeData: routeData,
+        child: const AddTagView(),
+        transitionsBuilder: bottomtotop,
+        durationInMilliseconds: 500,
+        reverseDurationInMilliseconds: 0,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
     SetPasswordRoute.name: (routeData) {
       return CustomPage<dynamic>(
         routeData: routeData,
@@ -63,10 +85,45 @@ class _$RouteGenerator extends RootStackRouter {
         barrierDismissible: false,
       );
     },
+    CustomFieldRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+        routeData: routeData,
+        child: const CustomFieldView(),
+        transitionsBuilder: righttoleftDashboard,
+        durationInMilliseconds: 500,
+        reverseDurationInMilliseconds: 0,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
     UserProfileRoute.name: (routeData) {
       return CustomPage<dynamic>(
         routeData: routeData,
         child: const UserProfileView(),
+        transitionsBuilder: righttoleftDashboard,
+        durationInMilliseconds: 500,
+        reverseDurationInMilliseconds: 0,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    CreateFolderRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+        routeData: routeData,
+        child: const CreateFolderView(),
+        fullscreenDialog: true,
+        transitionsBuilder: righttoleftDashboard,
+        durationInMilliseconds: 500,
+        reverseDurationInMilliseconds: 0,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    CreateItemsRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+        routeData: routeData,
+        child: const CreateItemsView(),
+        fullscreenDialog: true,
         transitionsBuilder: righttoleftDashboard,
         durationInMilliseconds: 500,
         reverseDurationInMilliseconds: 0,
@@ -300,6 +357,14 @@ class _$RouteGenerator extends RootStackRouter {
           path: '/lowstock',
         ),
         RouteConfig(
+          AddNoteRoute.name,
+          path: '/add-note',
+        ),
+        RouteConfig(
+          AddTagRoute.name,
+          path: '/add-tag',
+        ),
+        RouteConfig(
           SetPasswordRoute.name,
           path: '/setPassword',
         ),
@@ -308,8 +373,20 @@ class _$RouteGenerator extends RootStackRouter {
           path: '/move-summary',
         ),
         RouteConfig(
+          CustomFieldRoute.name,
+          path: '/custom-field',
+        ),
+        RouteConfig(
           UserProfileRoute.name,
           path: '/user-profile',
+        ),
+        RouteConfig(
+          CreateFolderRoute.name,
+          path: 'create-folder',
+        ),
+        RouteConfig(
+          CreateItemsRoute.name,
+          path: 'create-file',
         ),
         RouteConfig(
           CompanyDetailRoute.name,
@@ -464,6 +541,30 @@ class LowStockRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AddNoteView]
+class AddNoteRoute extends PageRouteInfo<void> {
+  const AddNoteRoute()
+      : super(
+          AddNoteRoute.name,
+          path: '/add-note',
+        );
+
+  static const String name = 'AddNoteRoute';
+}
+
+/// generated route for
+/// [AddTagView]
+class AddTagRoute extends PageRouteInfo<void> {
+  const AddTagRoute()
+      : super(
+          AddTagRoute.name,
+          path: '/add-tag',
+        );
+
+  static const String name = 'AddTagRoute';
+}
+
+/// generated route for
 /// [SetPasswordView]
 class SetPasswordRoute extends PageRouteInfo<void> {
   const SetPasswordRoute()
@@ -488,6 +589,18 @@ class MoveSummaryRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CustomFieldView]
+class CustomFieldRoute extends PageRouteInfo<void> {
+  const CustomFieldRoute()
+      : super(
+          CustomFieldRoute.name,
+          path: '/custom-field',
+        );
+
+  static const String name = 'CustomFieldRoute';
+}
+
+/// generated route for
 /// [UserProfileView]
 class UserProfileRoute extends PageRouteInfo<void> {
   const UserProfileRoute()
@@ -497,6 +610,30 @@ class UserProfileRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'UserProfileRoute';
+}
+
+/// generated route for
+/// [CreateFolderView]
+class CreateFolderRoute extends PageRouteInfo<void> {
+  const CreateFolderRoute()
+      : super(
+          CreateFolderRoute.name,
+          path: 'create-folder',
+        );
+
+  static const String name = 'CreateFolderRoute';
+}
+
+/// generated route for
+/// [CreateItemsView]
+class CreateItemsRoute extends PageRouteInfo<void> {
+  const CreateItemsRoute()
+      : super(
+          CreateItemsRoute.name,
+          path: 'create-file',
+        );
+
+  static const String name = 'CreateItemsRoute';
 }
 
 /// generated route for

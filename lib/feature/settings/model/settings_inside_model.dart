@@ -16,7 +16,7 @@ List<PreferencesSettingsModel> preferencesSettingsData = [
   PreferencesSettingsModel(
       name: "Özel İnputlar",
       file: "field.svg",
-      route: const PreferencesRoute()),
+      route: const CustomFieldRoute()),
   PreferencesSettingsModel(
       name: "Etiket Yönet", file: "tag.svg", route: const ManageTagRoute()),
   // PreferencesSettingsModel(

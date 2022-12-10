@@ -42,21 +42,18 @@ class QtyChangesView extends StatelessWidget {
           DashboardListForRouting(
               child: Column(
             children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: context.paddingAll(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const <Widget>[
-                      BodyMedium(data: "İsim"),
-                      BodyMedium(data: "Miktar Değişimleri"),
-                    ],
-                  ),
+              Padding(
+                padding: context.paddingAll(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const <Widget>[
+                    BodyMedium(data: "İsim"),
+                    BodyMedium(data: "Miktar Değişimleri"),
+                  ],
                 ),
               ),
               Expanded(
-                   flex: 10,
+                   
                 child: Container(
                   color: Colors.red,
                 ),

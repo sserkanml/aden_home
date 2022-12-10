@@ -61,9 +61,7 @@ class _OnboardViewState extends State<OnboardView> {
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -85,9 +83,7 @@ class _OnboardViewState extends State<OnboardView> {
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                Spacer(),
                   SizedBox(
                     width: context.dynamicWidth(1),
                     height: 50,
@@ -102,22 +98,27 @@ class _OnboardViewState extends State<OnboardView> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: "Bir hesabın var mı ? ",
-                        style: context.textTheme.bodyMedium!
-                            .copyWith(color: context.colorScheme.onSurface)),
-                    TextSpan(
-                        text: "Giriş Yap",
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            context.router.pushNamed(PathConstant.loginPath);
-                          },
-                        style: context.textTheme.bodyMedium!.copyWith(
-                            color: context.colorScheme.primary,
-                            fontWeight: FontWeight.bold)),
-                  ])),
+                  Expanded(
+                    child: FittedBox(
+                      child: RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: "Bir hesabın var mı ? ",
+                            style: context.textTheme.bodyMedium!
+                                .copyWith(color: context.colorScheme.onSurface)),
+                        TextSpan(
+                            text: "Giriş Yap",
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                context.router.pushNamed(PathConstant.loginPath);
+                              },
+                            style: context.textTheme.bodyMedium!.copyWith(
+                                color: context.colorScheme.primary,
+                                fontWeight: FontWeight.bold)),
+                      ])),
+                    ),
+                  ),
+                 
                 ],
               ),
             ),

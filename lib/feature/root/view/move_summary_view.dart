@@ -12,12 +12,12 @@ import '../widgets/dashboard_svg_icon.dart';
 import '../widgets/everything_folder.dart';
 
 class MoveSummaryView extends StatelessWidget {
-const MoveSummaryView({ Key? key }) : super(key: key);
+  const MoveSummaryView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-       body: Column(
+      body: Column(
         children: [
           Container(
             color: context.colorScheme.background,
@@ -33,8 +33,10 @@ const MoveSummaryView({ Key? key }) : super(key: key);
                       icon: const SvgSettingIcon(file: "exchange.svg"),
                     ),
                   ),
-                  const AnyFolder(
-                      file: "folder_solid.svg", data: "Herhangi Bir Hedef")
+                  const Expanded(
+                    child: AnyFolder(
+                        file: "folder_solid.svg", data: "Herhangi Bir Hedef"),
+                  )
                 ],
               ),
             ),
@@ -54,23 +56,26 @@ const MoveSummaryView({ Key? key }) : super(key: key);
                 const SizedBox(height: 10),
                 RichText(
                     text: TextSpan(children: [
-                   TextSpan(text: "Yeni bir ",style: context.textTheme.bodyMedium!.copyWith(
-                    color: context.colorScheme.onSurface
-                   )),
+                  TextSpan(
+                      text: "Yeni bir ",
+                      style: context.textTheme.bodyMedium!
+                          .copyWith(color: context.colorScheme.onSurface)),
                   TextSpan(
                       text: "veri aralığı ",
                       style: context.textTheme.bodyMedium!
-                          .copyWith(color: context.colorScheme.primary)),
-                   TextSpan(text: "ya da ",style: context.textTheme.bodyMedium!.copyWith(
-                    color: context.colorScheme.onSurface
-                   )),
+                          .copyWith(color: context.colorScheme.primary,fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text: "ya da ",
+                      style: context.textTheme.bodyMedium!
+                          .copyWith(color: context.colorScheme.onSurface)),
                   TextSpan(
                       text: "filtreni ",
                       style: context.textTheme.bodyMedium!
-                          .copyWith(color: context.colorScheme.primary)),
-                   TextSpan(text: "düzenle",style: context.textTheme.bodyMedium!.copyWith(
-                    color: context.colorScheme.onSurface
-                   )),
+                          .copyWith(color: context.colorScheme.primary,fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text: "düzenle",
+                      style: context.textTheme.bodyMedium!
+                          .copyWith(color: context.colorScheme.onSurface)),
                 ]))
               ],
             ),

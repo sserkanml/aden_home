@@ -7,6 +7,7 @@ class OnboardTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Headline6(
+      textAlign: TextAlign.center,
       data: label,
     );
   }
