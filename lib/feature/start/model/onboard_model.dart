@@ -16,3 +16,5 @@ List<OnBoardModel> onBoardData = [
   OnBoardModel(label: "Tüm Detayları İzle", image: "onboard4.svg"),
   OnBoardModel(label: "Ara,Filtrele ve Çıkart", image: "onboard5.svg"),
 ];
+
+

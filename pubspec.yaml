@@ -51,7 +51,12 @@ dependencies:
   flutter_next: ^0.1.1
   nine_grid_view: ^2.0.0
   swipe_refresh: ^1.0.2
-  textfield_tags: ^2.0.2
+  
+  http: ^0.13.5
+  email_validator: ^2.1.17
+  flutter_tagging: ^3.0.0
+  
+  
   
   
 

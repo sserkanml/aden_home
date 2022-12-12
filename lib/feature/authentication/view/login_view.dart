@@ -1,3 +1,4 @@
+import 'package:aden/core/route/route_generator.dart';
 import 'package:aden/core/util/extension.dart';
 import 'package:aden/core/widgets/appbar.dart';
 import 'package:auto_route/auto_route.dart';
@@ -24,7 +25,11 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(label: "Giriş Yap", context: context,autoImplicity: true,),
+      appBar: CustomAppBar(
+        label: "Giriş Yap",
+        context: context,
+        autoImplicity: true,
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -77,7 +82,7 @@ class _LoginViewState extends State<LoginView> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
-                            context.router.pushNamed("/root");
+                            context.router.replaceAll([const RootRoute()]);
                           },
                           child: const Text(
                             "Giriş Yap",

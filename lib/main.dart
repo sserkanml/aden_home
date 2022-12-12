@@ -4,6 +4,8 @@ import 'package:aden/core/service/dependecy_injenction.dart';
 import 'package:aden/core/service/supabase_service.dart';
 import 'package:aden/core/theme/dark_theme.dart';
 import 'package:aden/core/theme/light_theme.dart';
+import 'package:aden/feature/project/model/tags_mobx.dart';
+import 'package:aden/feature/project/model/tags_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kartal/kartal.dart';
@@ -12,6 +14,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
   DependecyService.getIt.registerSingleton<SupabaseService>(SupabaseService());
+  DependecyService.getIt.registerSingleton<TagsMobx>(TagsMobx());
+
+  DependecyService.getIt.get<TagsMobx>().models =
+      await TagsService.getAllTags();
+  DependecyService.getIt.get<TagsMobx>().copyModels = DependecyService.getIt
+      .get<TagsMobx>()
+      .models
+      .map<TagsModel>((e) => TagsModel(tags_id: e.tags_id, name: e.name).copyWith())
+      .toList();
+
   runApp(MyApp(savedMode: savedThemeMode));
 }
 

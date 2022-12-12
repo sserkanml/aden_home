@@ -3,7 +3,10 @@ import 'package:aden/feature/root/widgets/dashboard_grid.dart';
 import 'package:aden/feature/root/widgets/dashboard_list.dart';
 import 'package:aden/feature/root/widgets/inventory_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../core/service/dependecy_injenction.dart';
+import '../../../core/service/supabase_service.dart';
 import '../widgets/last_added.dart';
 
 class DashboardView extends StatelessWidget {
@@ -28,10 +31,14 @@ class DashboardView extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            DashboardList()
+            DashboardList(),
+         
           ],
         ),
       ),
     );
   }
 }
+
+
+ 

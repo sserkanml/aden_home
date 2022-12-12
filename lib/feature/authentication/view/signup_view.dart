@@ -1,4 +1,5 @@
 import 'package:aden/core/util/extension.dart';
+import 'package:aden/core/view_model/validator_view_model.dart';
 import 'package:aden/core/widgets/appbar.dart';
 import 'package:aden/core/widgets/bodylarge.dart';
 import 'package:aden/core/widgets/bodymedium.dart';
@@ -23,10 +24,33 @@ class SignupView extends StatefulWidget {
 class _SignupViewState extends State<SignupView> {
   bool isClickCheckbox = false;
   bool isClickPassword = false;
+  late TextEditingController emailcontroller;
+  late TextEditingController namecontroller;
+  late TextEditingController passwordcontroller;
+  @override
+  void initState() {
+    namecontroller = TextEditingController();
+    emailcontroller = TextEditingController();
+    passwordcontroller = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailcontroller.dispose();
+    namecontroller.dispose();
+    passwordcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(label: "Kayıt Ol", context: context,autoImplicity: true,),
+      appBar: CustomAppBar(
+        label: "Kayıt Ol",
+        context: context,
+        autoImplicity: true,
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -37,93 +61,132 @@ class _SignupViewState extends State<SignupView> {
               child: Center(
                 child: SingleChildScrollView(
                   padding: context.paddingAll(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const BodyLarge(
-                        data: "Bir Hesap Oluştur !",
-                        fontweight: FontWeight.bold,
-                      ),
-                      const SizedBox(height: 10),
-                      const BodyMedium(
-                          data: "Bugün bir hesap oluşturarak başlayabilirsin"),
-                      const SizedBox(height: 20),
-                      const CustomTextFormField(labelText: "Ad Soyad"),
-                      const SizedBox(height: 20),
-                      const CustomTextFormField(
-                        labelText: "Email",
-                        textInputType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: 20),
-                      CustomTextFormField(
-                        obscureText: isClickPassword ? true : false,
-                        labelText: "Şifre",
-                        suffix: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isClickPassword = !isClickPassword;
-                            });
-                          },
-                          icon: SvgPictureSuffix(
-                              file: isClickPassword
-                                  ? "eye.svg"
-                                  : "eye_close.svg"),
+                  child: Form(
+                    key: ValidatorService.signUpForm,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const BodyLarge(
+                          data: "Bir Hesap Oluştur !",
+                          fontweight: FontWeight.bold,
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      FormField(
-                        builder: (field) {
-                          return Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    value: isClickCheckbox,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isClickCheckbox = !isClickCheckbox;
-                                      });
-                                    },
-                                  ),
-                                  Expanded(
-                                    child: RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(
-                                          text: "Kullanıcı sözleşmesini ",
-                                          style: context.textTheme.bodyMedium!
-                                              .copyWith(
-                                                  color: context
-                                                      .colorScheme.primary)),
-                                      TextSpan(
-                                          text: "okudum ve kabul ediyorum ",
-                                          style: context.textTheme.bodyMedium!
-                                              .copyWith(
-                                                  color: context
-                                                      .colorScheme.onSurface)),
-                                    ])),
-                                  ),
-                                ],
-                              ),
-                              BodySmall(data: field.errorText ?? "")
-                            ],
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: context.dynamicWidth(1),
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Kayıt Ol",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                        const SizedBox(height: 10),
+                        const BodyMedium(
+                            data:
+                                "Bugün bir hesap oluşturarak başlayabilirsin"),
+                        const SizedBox(height: 20),
+                        CustomTextFormField(
+                          labelText: "Ad Soyad",
+                          controller: namecontroller,
+                          validateFunction: () {
+                            return ValidatorService.validateIsEmpty(
+                                value: namecontroller.text);
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        CustomTextFormField(
+                          labelText: "Email",
+                          controller: emailcontroller,
+                          validateFunction: () {
+                            return ValidatorService.validateIsEmpty(
+                                    value: emailcontroller.text) ??
+                                ValidatorService.validateEmail(
+                                    value: emailcontroller.text);
+                          },
+                          textInputType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(height: 20),
+                        CustomTextFormField(
+                          controller: passwordcontroller,
+                          validateFunction: () {
+                            return ValidatorService.validateIsEmpty(
+                                    value: passwordcontroller.text) ??
+                                ValidatorService.validatePassword(
+                                    value: passwordcontroller.text);
+                          },
+                          obscureText: isClickPassword ? true : false,
+                          labelText: "Şifre",
+                          suffix: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isClickPassword = !isClickPassword;
+                              });
+                            },
+                            icon: SvgPictureSuffix(
+                                file: isClickPassword
+                                    ? "eye.svg"
+                                    : "eye_close.svg"),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        FormField<bool>(
+                          validator: (value) {
+                            if (isClickCheckbox == false) {
+                              return "Bu alan boş geçilemez";
+                            } else {
+                              return null;
+                            }
+                          },
+                          builder: (field) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      value: isClickCheckbox,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isClickCheckbox = !isClickCheckbox;
+                                        });
+                                      },
+                                    ),
+                                    Expanded(
+                                      child: RichText(
+                                          text: TextSpan(children: [
+                                        TextSpan(
+                                            text: "Kullanıcı sözleşmesini ",
+                                            style: context.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: context
+                                                        .colorScheme.primary)),
+                                        TextSpan(
+                                            text: "okudum ve kabul ediyorum ",
+                                            style: context.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: context.colorScheme
+                                                        .onSurface)),
+                                      ])),
+                                    ),
+                                  ],
+                                ),
+                                BodySmall(
+                                  data: field.errorText ?? "",
+                                  color: context.colorScheme.error,
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: context.dynamicWidth(1),
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              ValidatorService.validateForm();
+                            },
+                            child: const Text(
+                              "Kayıt Ol",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )),

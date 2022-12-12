@@ -1,7 +1,10 @@
+import 'package:aden/core/service/dependecy_injenction.dart';
 import 'package:aden/core/widgets/bodymedium.dart';
+import 'package:aden/feature/project/model/tags_mobx.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tagging/flutter_tagging.dart';
+
 import 'package:kartal/kartal.dart';
-import 'package:textfield_tags/textfield_tags.dart';
 
 import '../../../core/widgets/appbar.dart';
 
@@ -13,12 +16,13 @@ class AddTagView extends StatefulWidget {
 }
 
 class _AddTagViewState extends State<AddTagView> {
-  late TextfieldTagsController controller;
   late double _distanceToField;
+  late TextEditingController textcontroller;
   @override
   void initState() {
     super.initState();
-    controller = TextfieldTagsController();
+
+    textcontroller = TextEditingController();
   }
 
   @override
@@ -30,7 +34,6 @@ class _AddTagViewState extends State<AddTagView> {
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
   }
 
   @override
@@ -63,115 +66,18 @@ class _AddTagViewState extends State<AddTagView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextFieldTags(
-              textfieldTagsController: controller,
-              textSeparators: const [' ', ','],
-              letterCase: LetterCase.normal,
-              validator: (String tag) {
-                bool? isContaning = controller.getTags?.contains(tag);
-                if (isContaning ?? false) {
-                  return '$tag zaten var';
-                } else if (controller.getTags!.length > 3) {
-                  return "Maksimum Etiket Sayısına Ulaşıldı";
-                }
-
-                return null;
-              },
-              inputfieldBuilder:
-                  (context, tec, fn, error, onChanged, onSubmitted) {
-                return ((context, sc, tags, onTagDelete) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      autovalidateMode: AutovalidateMode.always,
-                      style: context.textTheme.bodyMedium!.copyWith(
-                          color: context.colorScheme.onSurface.withOpacity(.7)),
-                      controller: tec,
-                      focusNode: fn,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 74, 137, 92),
-                            width: 3.0,
-                          ),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 74, 137, 92),
-                            width: 3.0,
-                          ),
-                        ),
-                        hintText: controller.hasTags ? '' : "Etiket Gir...",
-                        errorText: error,
-                        prefixIconConstraints:
-                            BoxConstraints(maxWidth: _distanceToField * 0.74),
-                        prefixIcon: tags.isNotEmpty
-                            ? SingleChildScrollView(
-                                controller: sc,
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                    children: tags.map((String tag) {
-                                  return Container(
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      color: Color.fromARGB(255, 74, 137, 92),
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0, vertical: 5.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          child: Text(
-                                            '#$tag',
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                          onTap: () {
-                                            //print("$tag selected");
-                                          },
-                                        ),
-                                        const SizedBox(width: 4.0),
-                                        InkWell(
-                                          child: const Icon(
-                                            Icons.cancel,
-                                            size: 14.0,
-                                            color: Color.fromARGB(
-                                                255, 233, 233, 233),
-                                          ),
-                                          onTap: () {
-                                            onTagDelete(tag);
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                }).toList()),
-                              )
-                            : null,
-                      ),
-                      onChanged: onChanged,
-                      onFieldSubmitted: onSubmitted,
-                    ),
-                  );
-                });
-              },
+            const Padding(
+              padding: EdgeInsets.all(16.0),
             ),
             const SizedBox(
-              height: 30,
+              height: 15,
             ),
-            BodyMedium(
-              data: "Mevcut Etiketler",
-              color: context.colorScheme.onSurface.withOpacity(.3),
-            ),
-            const SizedBox(
-              height: 10,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: BodyMedium(
+                data: "Mevcut Etiketler",
+                color: context.colorScheme.onSurface.withOpacity(.3),
+              ),
             ),
             Expanded(
                 child: ListView.separated(
@@ -179,7 +85,17 @@ class _AddTagViewState extends State<AddTagView> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          textcontroller.text = DependecyService.getIt
+                              .get<TagsMobx>()
+                              .models[index]
+                              .name;
+                        },
+                        title: BodyMedium(
+                            data: DependecyService.getIt
+                                .get<TagsMobx>()
+                                .models[index]
+                                .name),
                       );
                     },
                     separatorBuilder: (context, index) {
@@ -188,7 +104,8 @@ class _AddTagViewState extends State<AddTagView> {
                         color: context.colorScheme.onSurface.withOpacity(.3),
                       );
                     },
-                    itemCount: 10))
+                    itemCount:
+                        DependecyService.getIt.get<TagsMobx>().models.length))
           ],
         ),
       ),
