@@ -57,6 +57,7 @@ dependencies:
 
   wechat_assets_picker: ^8.2.0
   wechat_camera_picker: ^3.6.5
+  photo_manager: ^2.5.1+1
  
  
 

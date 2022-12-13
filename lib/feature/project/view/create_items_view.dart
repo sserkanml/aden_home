@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:aden/core/util/extension.dart';
 import 'package:aden/core/widgets/bodylarge.dart';
 import 'package:aden/core/widgets/bodymedium.dart';
-import 'package:aden/core/widgets/custom_svg_icon.dart';
 import 'package:aden/feature/project/model/tags_model.dart';
 import 'package:aden/feature/project/view_model/items_formr.dart';
 
@@ -15,11 +15,12 @@ import 'package:dotted_border/dotted_border.dart';
 
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 import '../../../core/route/route_generator.dart';
 import '../../../core/widgets/appbar.dart';
+import '../../../core/widgets/custom_svg_icon.dart';
+import '../model/images_managment.dart';
 import '../view_model/images_picker.dart';
 
 class CreateItemsView extends StatefulWidget {
@@ -35,8 +36,7 @@ class _CreateItemsViewState extends State<CreateItemsView> {
   late TextEditingController pricecontroller;
   late List<TagsModel>? selectedTagsList;
   late String? notes;
-  late List<AssetEntity>? selectedImage;
-  late List<String> pathName;
+
   int currentPageIndex = 0;
 
   @override
@@ -45,11 +45,22 @@ class _CreateItemsViewState extends State<CreateItemsView> {
     quantitycontroller = TextEditingController();
     pricecontroller = TextEditingController();
     selectedTagsList = [];
-    selectedImage = [];
-    pathName = [];
 
     notes = "";
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    ImageManagmentService.GenerateImagePicker(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    ImageManagmentService.imageModelCopy = [];
+    ImageManagmentService.imageModel = [];
   }
 
   @override
@@ -91,139 +102,325 @@ class _CreateItemsViewState extends State<CreateItemsView> {
                   height: context.dynamicHeight(.34),
                   width: context.dynamicWidth(1),
                   child: InkWell(
-                      onTap: () async {
-                        selectedImage = await AssetPicker.pickAssets(
-                          context,
-                          pickerConfig: AssetPickerConfig(
-                            maxAssets: 4,
-                            textDelegate: ImagePickerTextDelegate(),
-                            selectedAssets: selectedImage,
-                            specialItemPosition: SpecialItemPosition.prepend,
-                            specialItemBuilder: (
-                              BuildContext context,
-                              AssetPathEntity? path,
-                              int length,
-                            ) {
-                              if (path?.isAll != true) {
-                                return null;
-                              }
+                    onTap: () async {
+                      await ImageManagmentService.GenerateImagePicker(() {});
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return StatefulBuilder(
+                              builder: (context, customSetState) {
+                                return Material(
+                                  child: SizedBox(
+                                    height: context.dynamicHeight(.8),
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                            height: 40,
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: 8.0),
+                                                    child: BodyLarge(
+                                                        data: "Seçilen Resim"),
+                                                  ),
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      if (ImageManagmentService
+                                                          .imageModel.isEmpty) {
+                                                        for (var element
+                                                            in ImageManagmentService
+                                                                .imageModelCopy) {
+                                                          element.isSelected =
+                                                              false;
+                                                        }
+                                                        setState(() {});
+                                                      } else {
+                                                        ImageManagmentService
+                                                            .takeBack();
+                                                        setState(() {});
+                                                      }
+                                                    },
+                                                    icon:
+                                                        const Icon(Icons.close),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                        Positioned.fill(
+                                            bottom: 70,
+                                            top: 50,
+                                            right: 0,
+                                            left: 0,
+                                            child: NotificationListener<
+                                                ScrollNotification>(
+                                              onNotification: (notification) {
+                                                return ImageManagmentService
+                                                    .handleScrollEvent(
+                                                        notification, () {
+                                                  setState(() {
+                                                    ImageManagmentService
+                                                        .currentPage++;
+                                                  });
+                                                });
+                                              },
+                                              child: GridView.builder(
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 4,
+                                                        crossAxisSpacing: 5,
+                                                        mainAxisSpacing: 5),
+                                                itemCount: ImageManagmentService
+                                                    .entites.length,
+                                                itemBuilder: (context, index) {
+                                                  return InkWell(
+                                                      onTap: () async {
+                                                        if (ImageManagmentService
+                                                                .imageModelCopy
+                                                                .where((element) =>
+                                                                    element
+                                                                        .isSelected ==
+                                                                    true)
+                                                                .length ==
+                                                            4) {
+                                                          if (ImageManagmentService
+                                                              .imageModelCopy[
+                                                                  index]
+                                                              .isSelected) {
+                                                            ImageManagmentService
+                                                                .imageModelCopy[
+                                                                    index]
+                                                                .isSelected = false;
+                                                          }
+                                                        } else {
+                                                          if (ImageManagmentService
+                                                              .imageModelCopy[
+                                                                  index]
+                                                              .isSelected) {
+                                                            ImageManagmentService
+                                                                .imageModelCopy[
+                                                                    index]
+                                                                .isSelected = false;
+                                                          } else {
+                                                            ImageManagmentService
+                                                                .imageModelCopy[
+                                                                    index]
+                                                                .isSelected = true;
+                                                          }
+                                                        }
 
-                              return GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () async {
-                                  Feedback.forTap(context);
-                                  AssetEntity? result;
-                                  if (selectedImage?.length == 4) {
-                                  } else {
-                                    result = await CameraPicker.pickFromCamera(
-                                      context,
-                                      pickerConfig: CameraPickerConfig(
-                                          enableRecording: false,
-                                          textDelegate:
-                                              CustomCameraPickerDelegate()),
-                                    );
-                                  }
-
-                                  if (result != null) {
-                                    (BuildContext context,
-                                            AssetEntity result) =>
-                                        selectedImage?.add(result);
-
-                                    Navigator.of(context).pop(<AssetEntity>[
-                                      ...?selectedImage,
-                                      result
-                                    ]);
-                                  }
-                                },
-                                child: const Center(
-                                  child: Icon(Icons.camera_enhance, size: 42.0),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                        bool firstTimeClear = true;
-                        selectedImage?.forEach(
-                          (element) async {
-                            if (firstTimeClear) {
-                              pathName.clear();
-                              firstTimeClear = false;
-                            }
-                            final file = await element.file;
-                            final String result = file!.path;
-                            pathName.add(result);
-                            setState(() {});
-                          },
-                        );
-                        setState(() {});
-                      },
-                      // ignore: prefer_is_empty
-                      child: selectedImage?.length == 0
-                          ? DottedBorder(
-                              dashPattern: const [10, 15],
-                              color:
-                                  context.colorScheme.onSurface.withOpacity(.5),
-                              child: SizedBox(
-                                width: context.dynamicWidth(1),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomSvgIcon(
-                                      file: "addpicture.svg",
-                                      size: 45,
-                                      color: context.colorScheme.onSurface
-                                          .withOpacity(.3),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    BodyMedium(
-                                      data: "Resim Ekle",
-                                      color: context.colorScheme.onSurface
-                                          .withOpacity(.3),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          : PageView.builder(
-                              onPageChanged: (value) {
-                                setState(() {
-                                  currentPageIndex = value;
-                                });
-                              },
-                              itemBuilder: (context, index) {
-                                return (pathName.length) - 1 >= index
-                                    ? Image.file(
-                                        File(
-                                          pathName[index],
-                                        ),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : SizedBox(
-                                        width: context.dynamicWidth(1),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            CustomSvgIcon(
-                                              file: "addpicture.svg",
-                                              size: 45,
-                                              color: context
-                                                  .colorScheme.onSurface
-                                                  .withOpacity(.3),
+                                                        customSetState(
+                                                          () {},
+                                                        );
+                                                      },
+                                                      child: ImageManagmentService
+                                                              .imageModelCopy
+                                                              .isEmpty
+                                                          ? AssetEntityImage(
+                                                              ImageManagmentService
+                                                                      .entites[
+                                                                  index],
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : ImageManagmentService
+                                                                  .imageModelCopy[
+                                                                      index]
+                                                                  .isSelected
+                                                              ? Stack(
+                                                                  children: [
+                                                                    Positioned
+                                                                        .fill(
+                                                                      child:
+                                                                          AssetEntityImage(
+                                                                        ImageManagmentService
+                                                                            .entites[index],
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      color: context
+                                                                          .colorScheme
+                                                                          .onSurface
+                                                                          .withOpacity(
+                                                                              .3),
+                                                                      child:
+                                                                          const Center(
+                                                                        child: Icon(
+                                                                            Icons.check_rounded),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              : AssetEntityImage(
+                                                                  ImageManagmentService
+                                                                          .entites[
+                                                                      index],
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ));
+                                                },
+                                              ),
+                                            )),
+                                        Positioned(
+                                          bottom: 0,
+                                          left: 0,
+                                          right: 0,
+                                          height: 70,
+                                          child: Padding(
+                                            padding: context.paddingAll(),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: SizedBox(
+                                                    height: context
+                                                        .dynamicHeight(1),
+                                                    child: ElevatedButton(
+                                                        onPressed: () {
+                                                          ImageManagmentService
+                                                              .saveImageModel();
+                                                          setState(() {});
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const BodyMedium(
+                                                          data: "Seç",
+                                                        )),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 20),
+                                                SizedBox(
+                                                  height:
+                                                      context.dynamicHeight(1),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      final AssetEntity?
+                                                          entity =
+                                                          await CameraPicker
+                                                              .pickFromCamera(
+                                                        context,
+                                                        pickerConfig:
+                                                            CameraPickerConfig(
+                                                                textDelegate:
+                                                                    CustomCameraPickerDelegate()),
+                                                      );
+                                                      if (entity == null) {
+                                                        return;
+                                                      } else {
+                                                        ImageManagmentService
+                                                            .entites
+                                                            .add(entity);
+                                                        customSetState(() {});
+                                                      }
+                                                    },
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .all(
+                                                              Radius.circular(
+                                                                  5)),
+                                                      child: Container(
+                                                        color: Colors.blue,
+                                                        width: 40,
+                                                        height: 40,
+                                                        child: const Center(
+                                                          child: Icon(Icons
+                                                              .camera_enhance),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                            const SizedBox(height: 10),
-                                            BodyMedium(
-                                              data: "Resim Ekle",
-                                              color: context
-                                                  .colorScheme.onSurface
-                                                  .withOpacity(.3),
-                                            )
-                                          ],
-                                        ),
-                                      );
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
                               },
-                              itemCount: 4,
-                            ))),
+                            );
+                          });
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        color: context.colorScheme.background,
+                        height: context.dynamicHeight(.35),
+                        width: context.dynamicWidth(1),
+                        child: ImageManagmentService.imageModel.isEmpty
+                            ? DottedBorder(
+                                dashPattern: const [10, 15],
+                                color: context.colorScheme.onSurface
+                                    .withOpacity(.5),
+                                child: SizedBox(
+                                  width: context.dynamicWidth(1),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomSvgIcon(
+                                        file: "addpicture.svg",
+                                        size: 45,
+                                        color: context.colorScheme.onSurface
+                                            .withOpacity(.3),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      BodyMedium(
+                                        data: "Resim Ekle",
+                                        color: context.colorScheme.onSurface
+                                            .withOpacity(.3),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : PageView.builder(
+                                itemBuilder: (context, index) {
+                                  return ImageManagmentService
+                                              .imageModel.length >
+                                          index
+                                      ? Image.file(
+                                          File(ImageManagmentService
+                                              .imageModel[index].path),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : SizedBox(
+                                          width: context.dynamicWidth(1),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              CustomSvgIcon(
+                                                file: "addpicture.svg",
+                                                size: 45,
+                                                color: context
+                                                    .colorScheme.onSurface
+                                                    .withOpacity(.3),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              BodyMedium(
+                                                data: "Resim Ekle",
+                                                color: context
+                                                    .colorScheme.onSurface
+                                                    .withOpacity(.3),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                },
+                                itemCount: 4,
+                              )),
+                  )),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
