@@ -17,7 +17,7 @@ class TransactionReportView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        label: "Düşük Stok",
+        label: "İşlem Geçmişi",
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

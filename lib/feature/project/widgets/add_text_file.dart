@@ -6,8 +6,16 @@ class ItemAddTextField extends StatelessWidget {
   final String hintText;
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      style: context.textTheme.headline6!
+    return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Bu alan boş geçilemez";
+        } else {
+          return null;
+        }
+      },
+      style: context.textTheme.bodyLarge!
+          .copyWith(color: context.colorScheme.onSurface.withOpacity(.4))
           .copyWith(color: context.colorScheme.onSurface),
       decoration: InputDecoration(
           hintText: hintText,

@@ -1,33 +1,43 @@
 import 'package:aden/core/service/dependecy_injenction.dart';
+import 'package:aden/core/util/extension.dart';
 import 'package:aden/core/widgets/bodymedium.dart';
 import 'package:aden/feature/project/model/tags_mobx.dart';
+import 'package:aden/feature/project/model/tags_model.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tagging/flutter_tagging.dart';
 
 import 'package:kartal/kartal.dart';
 
 import '../../../core/widgets/appbar.dart';
 
 class AddTagView extends StatefulWidget {
-  const AddTagView({Key? key}) : super(key: key);
+  final List<TagsModel>? tagsList;
+  const AddTagView({Key? key, this.tagsList}) : super(key: key);
 
   @override
   State<AddTagView> createState() => _AddTagViewState();
 }
 
 class _AddTagViewState extends State<AddTagView> {
-  late double _distanceToField;
-  late TextEditingController textcontroller;
+  late List<TagsModel> selectedList;
+  late List<TagsModel> savedlist;
+  List<String> selectedNames = [];
+  List<String> tagsListNames = [];
+  late int length;
   @override
   void initState() {
     super.initState();
-
-    textcontroller = TextEditingController();
+    length = widget.tagsList?.length ?? 0;
+    selectedList = widget.tagsList ?? [];
+    savedlist = [...selectedList];
+    for (var element in selectedList) {
+      tagsListNames.add(element.name);
+      selectedNames.add(element.name);
+    }
   }
 
   @override
   void didChangeDependencies() {
-    _distanceToField = MediaQuery.of(context).size.width;
     super.didChangeDependencies();
   }
 
@@ -41,21 +51,22 @@ class _AddTagViewState extends State<AddTagView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(12.0),
-            child: TextButton(
-              onPressed: null,
-              child: Text(
-                "Kaydet",
-              ),
+        actions: [
+          TextButton(
+            onPressed: const ListEquality().equals(selectedNames, tagsListNames)
+                ? null
+                : () {
+                    context.router.pop<List<TagsModel>?>(selectedList);
+                  },
+            child: const Text(
+              "Kaydet",
             ),
           ),
         ],
         label: "Etiketler",
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            context.router.pop<List<TagsModel>?>(savedlist);
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -66,12 +77,36 @@ class _AddTagViewState extends State<AddTagView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: context.paddingAll(),
+              child: TextFormField(
+                style: context.textTheme.bodyMedium!
+                    .copyWith(color: context.colorScheme.onSurface),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search),
+                  hintText: "Arama Yap",
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
             ),
             const SizedBox(
               height: 15,
             ),
+            Container(
+              height: 30,
+              margin: const EdgeInsets.all(10),
+              child: buildChips(),
+            ),
+            Visibility(
+                visible: selectedList.length > 3,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: BodyMedium(
+                    data: "En fazla 4 etiket seçilebilir",
+                    color: context.colorScheme.error,
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: BodyMedium(
@@ -86,10 +121,24 @@ class _AddTagViewState extends State<AddTagView> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         onTap: () {
-                          textcontroller.text = DependecyService.getIt
+                          if (selectedList.length == 4) {
+                            return;
+                          } else if (selectedList.contains(DependecyService
+                              .getIt
                               .get<TagsMobx>()
-                              .models[index]
-                              .name;
+                              .models[index])) {
+                            return;
+                          } else {
+                            selectedList.add(DependecyService.getIt
+                                .get<TagsMobx>()
+                                .models[index]);
+                            selectedNames.add(DependecyService.getIt
+                                .get<TagsMobx>()
+                                .models[index]
+                                .name);
+                          }
+
+                          setState(() {});
                         },
                         title: BodyMedium(
                             data: DependecyService.getIt
@@ -109,6 +158,42 @@ class _AddTagViewState extends State<AddTagView> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildChips() {
+    List<Widget> chips = [];
+
+    for (int i = 0; i < selectedList.length; i++) {
+      Padding actionChip = Padding(
+        padding: const EdgeInsets.only(right: 12.0),
+        child: InputChip(
+          // selected: _selected[i],
+          label: Text(selectedList[i].name),
+
+          elevation: 0,
+          pressElevation: 0,
+          shadowColor: Colors.teal,
+
+          onDeleted: () {
+            selectedList.removeAt(i);
+            // _selected.removeAt(i);
+            selectedNames.removeAt(i);
+            setState(() {
+              selectedList = selectedList;
+              // _selected = _selected;
+            });
+          },
+        ),
+      );
+
+      chips.add(actionChip);
+    }
+
+    return ListView(
+      // This line does the trick.
+      scrollDirection: Axis.horizontal,
+      children: chips,
     );
   }
 }

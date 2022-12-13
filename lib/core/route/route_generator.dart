@@ -33,6 +33,7 @@ import 'package:aden/feature/start/view/onboard_view.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../feature/project/model/tags_model.dart';
 import '../../feature/root/view/dasboard_view.dart';
 import '../../feature/root/view/root_view.dart';
 import 'custom_animations.dart';
@@ -55,14 +56,14 @@ part 'route_generator.gr.dart';
       reverseDurationInMilliseconds: 0,
       durationInMilliseconds: 500,
     ),
-    CustomRoute(
+    CustomRoute<String?>(
       transitionsBuilder: bottomtotop,
       page: AddNoteView,
       path: "/add-note",
       reverseDurationInMilliseconds: 0,
       durationInMilliseconds: 500,
     ),
-    CustomRoute(
+    CustomRoute<List<TagsModel>?>(
       transitionsBuilder: bottomtotop,
       page: AddTagView,
       path: "/add-tag",

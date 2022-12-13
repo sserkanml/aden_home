@@ -1,10 +1,14 @@
 import 'package:aden/core/util/extension.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+
+import 'package:kartal/kartal.dart';
 
 import '../../../core/widgets/appbar.dart';
 
 class AddNoteView extends StatefulWidget {
-  const AddNoteView({Key? key}) : super(key: key);
+  final String? getNotes;
+  const AddNoteView({Key? key, this.getNotes}) : super(key: key);
 
   @override
   State<AddNoteView> createState() => _AddNoteViewState();
@@ -12,9 +16,11 @@ class AddNoteView extends StatefulWidget {
 
 class _AddNoteViewState extends State<AddNoteView> {
   late TextEditingController controller;
+
   @override
   void initState() {
     controller = TextEditingController();
+    controller.text = widget.getNotes ?? " ";
     super.initState();
   }
 
@@ -23,12 +29,16 @@ class _AddNoteViewState extends State<AddNoteView> {
     return Scaffold(
       appBar: CustomAppBar(
         label: "Notlar",
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0),
             child: TextButton(
-              onPressed: null,
-              child: Text(
+              onPressed: controller.text == widget.getNotes
+                  ? null
+                  : () {
+                      context.router.pop<String?>(controller.text);
+                    },
+              child: const Text(
                 "Kaydet",
               ),
             ),
@@ -36,7 +46,7 @@ class _AddNoteViewState extends State<AddNoteView> {
         ],
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            context.router.pop<String?>(widget.getNotes);
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -49,7 +59,12 @@ class _AddNoteViewState extends State<AddNoteView> {
         child: Column(
           children: [
             TextFormField(
+              style: context.textTheme.bodyMedium!.copyWith(
+                  color: context.colorScheme.onSurface.withOpacity(.7)),
               controller: controller,
+              onChanged: (value) {
+                setState(() {});
+              },
               decoration: const InputDecoration(hintText: "Not Yaz"),
             )
           ],

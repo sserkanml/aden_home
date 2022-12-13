@@ -10,12 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kartal/kartal.dart';
 
+import 'feature/project/view_model/images_picker.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
   DependecyService.getIt.registerSingleton<SupabaseService>(SupabaseService());
   DependecyService.getIt.registerSingleton<TagsMobx>(TagsMobx());
-
+ 
   DependecyService.getIt.get<TagsMobx>().models =
       await TagsService.getAllTags();
   DependecyService.getIt.get<TagsMobx>().copyModels = DependecyService.getIt

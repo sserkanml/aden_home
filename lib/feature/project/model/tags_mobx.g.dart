@@ -57,6 +57,15 @@ mixin _$TagsMobx on _TagsMobxBase, Store {
     });
   }
 
+  late final _$updateTagOriginalAsyncAction =
+      AsyncAction('_TagsMobxBase.updateTagOriginal', context: context);
+
+  @override
+  Future<void> updateTagOriginal(List<String> updated, List<String> value) {
+    return _$updateTagOriginalAsyncAction
+        .run(() => super.updateTagOriginal(updated, value));
+  }
+
   late final _$deleteTagOriginalAsyncAction =
       AsyncAction('_TagsMobxBase.deleteTagOriginal', context: context);
 

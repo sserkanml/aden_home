@@ -42,9 +42,14 @@ class _$RouteGenerator extends RootStackRouter {
       );
     },
     AddNoteRoute.name: (routeData) {
-      return CustomPage<dynamic>(
+      final args = routeData.argsAs<AddNoteRouteArgs>(
+          orElse: () => const AddNoteRouteArgs());
+      return CustomPage<String?>(
         routeData: routeData,
-        child: const AddNoteView(),
+        child: AddNoteView(
+          key: args.key,
+          getNotes: args.getNotes,
+        ),
         transitionsBuilder: bottomtotop,
         durationInMilliseconds: 500,
         reverseDurationInMilliseconds: 0,
@@ -53,9 +58,14 @@ class _$RouteGenerator extends RootStackRouter {
       );
     },
     AddTagRoute.name: (routeData) {
-      return CustomPage<dynamic>(
+      final args = routeData.argsAs<AddTagRouteArgs>(
+          orElse: () => const AddTagRouteArgs());
+      return CustomPage<List<TagsModel>?>(
         routeData: routeData,
-        child: const AddTagView(),
+        child: AddTagView(
+          key: args.key,
+          tagsList: args.tagsList,
+        ),
         transitionsBuilder: bottomtotop,
         durationInMilliseconds: 500,
         reverseDurationInMilliseconds: 0,
@@ -542,26 +552,70 @@ class LowStockRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [AddNoteView]
-class AddNoteRoute extends PageRouteInfo<void> {
-  const AddNoteRoute()
-      : super(
+class AddNoteRoute extends PageRouteInfo<AddNoteRouteArgs> {
+  AddNoteRoute({
+    Key? key,
+    String? getNotes,
+  }) : super(
           AddNoteRoute.name,
           path: '/add-note',
+          args: AddNoteRouteArgs(
+            key: key,
+            getNotes: getNotes,
+          ),
         );
 
   static const String name = 'AddNoteRoute';
 }
 
+class AddNoteRouteArgs {
+  const AddNoteRouteArgs({
+    this.key,
+    this.getNotes,
+  });
+
+  final Key? key;
+
+  final String? getNotes;
+
+  @override
+  String toString() {
+    return 'AddNoteRouteArgs{key: $key, getNotes: $getNotes}';
+  }
+}
+
 /// generated route for
 /// [AddTagView]
-class AddTagRoute extends PageRouteInfo<void> {
-  const AddTagRoute()
-      : super(
+class AddTagRoute extends PageRouteInfo<AddTagRouteArgs> {
+  AddTagRoute({
+    Key? key,
+    List<TagsModel>? tagsList,
+  }) : super(
           AddTagRoute.name,
           path: '/add-tag',
+          args: AddTagRouteArgs(
+            key: key,
+            tagsList: tagsList,
+          ),
         );
 
   static const String name = 'AddTagRoute';
+}
+
+class AddTagRouteArgs {
+  const AddTagRouteArgs({
+    this.key,
+    this.tagsList,
+  });
+
+  final Key? key;
+
+  final List<TagsModel>? tagsList;
+
+  @override
+  String toString() {
+    return 'AddTagRouteArgs{key: $key, tagsList: $tagsList}';
+  }
 }
 
 /// generated route for

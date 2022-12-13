@@ -10,20 +10,37 @@ import '../../../core/widgets/bodymedium.dart';
 import '../../../core/widgets/custom_svg_icon.dart';
 import '../../root/widgets/dashboard_svg_icon.dart';
 import '../../root/widgets/folder_without_arrow_down.dart';
+import '../model/tags_model.dart';
 import '../widgets/add_text_file.dart';
 
-class CreateFolderView extends StatelessWidget {
+class CreateFolderView extends StatefulWidget {
   const CreateFolderView({Key? key}) : super(key: key);
+
+  @override
+  State<CreateFolderView> createState() => _CreateFolderViewState();
+}
+
+class _CreateFolderViewState extends State<CreateFolderView> {
+  late List<TagsModel>? selectedTagsList;
+  late String? notes;
+  @override
+  void initState() {
+    selectedTagsList = [];
+    notes = "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        actions: const [
+        actions:  [
           Padding(
             padding: EdgeInsets.all(12.0),
             child: TextButton(
-              onPressed: null,
+              onPressed: () {
+                
+              },
               child: Text(
                 "Kaydet",
               ),
@@ -47,7 +64,7 @@ class CreateFolderView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               color: context.colorScheme.background,
-              height: context.dynamicHeight(.26),
+              height: context.dynamicHeight(.35),
               width: context.dynamicWidth(1),
               child: DottedBorder(
                 dashPattern: const [10, 15],
@@ -78,7 +95,7 @@ class CreateFolderView extends StatelessWidget {
                 children: const [
                   FolderWithoutArrowDown(
                       file: "folder_solid.svg", data: "Malzeme"),
-                  ItemAddTextField(hintText: "Malzeme Ekle")
+                  ItemAddTextField(hintText: "Klasör Ekle")
                 ],
               ),
             ),
@@ -89,9 +106,46 @@ class CreateFolderView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListTile(
-                    onTap: () {
-                      context.router.push(const AddTagRoute());
+                    onTap: () async {
+                      selectedTagsList = await context.router
+                          .push<List<TagsModel>?>(
+                              AddTagRoute(tagsList: selectedTagsList));
+
+                      setState(() {});
                     },
+                    subtitle: (selectedTagsList?.length ?? 0) == 0
+                        ? null
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: SizedBox(
+                              height: 40,
+                              child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: selectedTagsList!.map<Widget>((e) {
+                                    return Container(
+                                      margin: const EdgeInsets.only(right: 10),
+                                      child: InputChip(
+                                        // selected: _selected[i],
+                                        label: Text(e.name),
+
+                                        elevation: 0,
+                                        pressElevation: 0,
+                                        selected: true,
+                                        padding: const EdgeInsets.all(5),
+                                        labelStyle: context
+                                            .textTheme.bodyMedium!
+                                            .copyWith(
+                                                color:
+                                                    context.colorScheme.primary,
+                                                fontWeight: FontWeight.bold),
+                                        backgroundColor: context
+                                            .colorScheme.primary
+                                            .withOpacity(.3),
+                                      ),
+                                    );
+                                  }).toList()),
+                            ),
+                          ),
                     trailing: const Icon(Icons.arrow_right),
                     title: const BodyMedium(data: "Etiketler"),
                     contentPadding: const EdgeInsets.symmetric(
@@ -104,11 +158,16 @@ class CreateFolderView extends StatelessWidget {
                     color: context.colorScheme.onSurface.withOpacity(.1),
                   ),
                   ListTile(
-                    onTap: () {
-                      context.router.push(const AddNoteRoute());
+                    onTap: () async {
+                      notes = await context.router
+                          .push<String?>(AddNoteRoute(getNotes: notes));
+                      setState(() {});
                     },
                     trailing: const Icon(Icons.arrow_right),
                     title: const BodyMedium(data: "Notlar"),
+                    subtitle: BodyMedium(
+                        data: notes ?? "",
+                        color: context.colorScheme.onSurface.withOpacity(.4)),
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: 0,
                       horizontal: 0.0,
@@ -147,7 +206,7 @@ class CreateFolderView extends StatelessWidget {
                   const SizedBox(height: 20),
                   TextButton(
                     onPressed: () {
-                      context.router.push(CustomFieldRoute());
+                      context.router.push(const CustomFieldRoute());
                     },
                     child: const Text(
                       "Özel Alan Ekle",

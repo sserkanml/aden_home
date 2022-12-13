@@ -54,7 +54,13 @@ dependencies:
   
   http: ^0.13.5
   email_validator: ^2.1.17
-  flutter_tagging: ^3.0.0
+
+  wechat_assets_picker: ^8.2.0
+  wechat_camera_picker: ^3.6.5
+ 
+ 
+
+
   
   
   

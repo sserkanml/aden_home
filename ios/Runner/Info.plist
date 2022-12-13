@@ -13,6 +13,13 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
+<key>NSAppTransportSecurity</key>
+<dict>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+</dict>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Galeri kullanımına izin ver</string>
 	<string>aden</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
