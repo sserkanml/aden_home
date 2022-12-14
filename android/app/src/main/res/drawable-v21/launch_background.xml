@@ -7,6 +7,10 @@
     <item>
         <bitmap
             android:gravity="center"
+<<<<<<< HEAD
             android:src="@mipmap/envanterus" />
+=======
+            android:src="@mipmap/envaterus" />
+>>>>>>> 358127d0d201859570c71492526e730f9b1cb76e
     </item>
 </layer-list>
