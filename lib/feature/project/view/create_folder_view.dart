@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:aden/core/route/route_generator.dart';
+import 'package:aden/core/service/dependecy_injenction.dart';
 import 'package:aden/core/util/extension.dart';
+import 'package:aden/feature/project/mobx/folder_mobx.dart';
 import 'package:aden/feature/project/model/images_managment.dart';
+import 'package:aden/feature/project/service/create_folder.dart';
 import 'package:aden/feature/project/view_model/form_folder.dart';
 import 'package:aden/feature/project/view_model/images_picker.dart';
 import 'package:auto_route/auto_route.dart';
@@ -60,7 +63,23 @@ class _CreateFolderViewState extends State<CreateFolderView> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                final answer = FormFolder.validateForm();
+                if (answer) {
+                  CreateFolderDatabase().createFolder(
+                      folderName: FormFolder.folderName,
+                      images: ImageManagmentService.imageModel
+                          .map<String>((e) => e.path)
+                          .toList());
+                  await DependecyService.getIt
+                      .get<FolderMobx>()
+                      .getAllFolders();
+                      
+                  Navigator.pop(context);
+                } else {
+                  return;
+                }
+              },
               child: const Text(
                 "Kaydet",
               ),
@@ -262,6 +281,7 @@ class _CreateFolderViewState extends State<CreateFolderView> {
                                                   },
                                                   child: const BodyMedium(
                                                     data: "Seç",
+                                                    color: Colors.white,
                                                   )),
                                             ),
                                           ),
@@ -296,7 +316,9 @@ class _CreateFolderViewState extends State<CreateFolderView> {
                                                   height: 40,
                                                   child: const Center(
                                                     child: Icon(
-                                                        Icons.camera_enhance),
+                                                      Icons.camera_enhance,
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                 ),
                                               ),

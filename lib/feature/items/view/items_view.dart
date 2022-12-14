@@ -1,15 +1,20 @@
+import 'dart:io';
+
 import 'package:aden/core/route/route_generator.dart';
+import 'package:aden/core/service/dependecy_injenction.dart';
 import 'package:aden/core/util/extension.dart';
 import 'package:aden/core/view_model/show_bottom_sheet.dart';
 import 'package:aden/core/widgets/appbar.dart';
 import 'package:aden/core/widgets/bodylarge.dart';
 import 'package:aden/core/widgets/bodymedium.dart';
 import 'package:aden/feature/items/widgets/items_summary_info.dart';
+import 'package:aden/feature/project/mobx/folder_mobx.dart';
 import 'package:aden/feature/root/widgets/dashboard_svg_icon.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kartal/kartal.dart';
+import 'package:nine_grid_view/nine_grid_view.dart';
 
 class ItemsView extends StatelessWidget {
   const ItemsView({Key? key}) : super(key: key);
@@ -21,15 +26,100 @@ class ItemsView extends StatelessWidget {
       appBar: itemsappbar(context),
       floatingActionButton: itemsfloatingactionbutton(context),
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                padding: const EdgeInsets.all(15),
-                color: context.colorScheme.background,
-                child: const ItemsSummaryInfo())
-          ],
-        ),
+          child: Column(
+        children: [
+          Container(
+              padding: const EdgeInsets.all(15),
+              color: context.colorScheme.background,
+              child: const ItemsSummaryInfo()),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              const Spacer(),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.bar_chart_sharp),
+              ),
+            ],
+          ),
+          Expanded(
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (context, outer) {
+                    return Card(
+                      elevation: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            NineGridView(
+                              width: 150,
+                              margin: const EdgeInsets.all(4),
+                              itemCount: 4,
+                              space: 10,
+                              itemBuilder: (context, index) {
+                                return DependecyService.getIt
+                                            .get<FolderMobx>()
+                                            .folders[outer]
+                                            .images
+                                            .length >
+                                        index
+                                    ? Image.file(
+                                        File(
+                                          DependecyService.getIt
+                                              .get<FolderMobx>()
+                                              .folders[outer]
+                                              .images[index],
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/file_default.png');
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    children: [
+                                      BodyMedium(
+                                        data: DependecyService.getIt
+                                            .get<FolderMobx>()
+                                            .folders[outer]
+                                            .id_folder
+                                            .substring(0, 8),
+                                        color: context.colorScheme.onSurface
+                                            .withOpacity(.4),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      BodyLarge(
+                                          data: DependecyService.getIt
+                                              .get<FolderMobx>()
+                                              .folders[outer]
+                                              .name),
+                                    ],
+                                  ),
+                                  const DashboardSvgIcon(file: "ellipsis.svg"),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      height: 0,
+                      color: context.colorScheme.onSurface.withOpacity(.3),
+                    );
+                  },
+                  itemCount:
+                      DependecyService.getIt.get<FolderMobx>().folders.length))
+        ],
       )),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:aden/feature/project/view_model/form_folder.dart';
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
 
@@ -7,6 +8,12 @@ class ItemAddTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onSaved: (newValue) {
+        if (hintText == 'Malzeme Ekle') {
+        } else {
+          FormFolder.folderName = newValue!;
+        }
+      },
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "Bu alan boş geçilemez";
